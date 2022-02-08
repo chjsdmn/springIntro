@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hallo</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        /**
+         * $.get(url, data，回调函数function (data){})
+         * 发送get请求，url是请求地址，data为请求列表的数据，请求成功后的回调函数，参数为服务器返回的数据
+         * 如果有任何改动，要点小绿锤子重新编译
+         */
+        $(function (){
+            $("#ut").click(function (){
+                const url = "/?navn=" + $("#navn").val();
+                $.get(url, function (data){
+                    $("#vis").html(data);
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    Navn <input id="navn" type="text">
+    <button id="ut">Stykk</button>
+    <div id="vis"></div>
+</body>
+</html>
