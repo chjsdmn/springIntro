@@ -13,6 +13,6 @@ public class HalloController {
     @GetMapping("/")   //限定了只有Get请求才能访问的路径。
     String hallo(String navn){
         int length = navn.length();
-        return "Hallo " + navn + ", navnen din er " + length + " ord langt.";
+        return "Hallo " + navn + ", navnet ditt er " + length + " ord langt.";
     }
 }
