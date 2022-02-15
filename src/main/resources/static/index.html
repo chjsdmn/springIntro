@@ -4,26 +4,78 @@
     <meta charset="UTF-8">
     <title>Hallo</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-        /**
-         * $.get(url, data，回调函数function (data){})
-         * 发送get请求，url是请求地址，data为请求列表的数据，请求成功后的回调函数，参数为服务器返回的数据
-         * 如果有任何改动，要点小绿锤子重新编译
-         */
-        $(function (){
-            $("#ut").click(function (){
-                const url = "/?navn=" + $("#navn").val();
-                $.get(url, function (data){
-                    $("#vis").html(data);
-                })
-            })
-        })
-    </script>
 </head>
 <body>
     <h1>Første webprogram</h1>
-    Skriv inn navnet <input id="navn" type="text">
-    <button id="ut">Stykk</button>
-    <div id="vis"></div>
+    <section>
+        <h3>Navn</h3>
+        Skriv inn navnet <input id="navn1" type="text">
+        <button id="ut">Stykk</button>
+        <div id="vis"></div>
+    </section>
+    <section>
+        <h3>Kunde</h3>
+        Skriv inn navnet:
+        <input type="text" id="navn"><br><br>
+        Skriv inn adressen:
+        <input type="text" id="adresse">
+        <button id="registre">Registrer</button>
+        <h4>Alle kundene:</h4>
+        <div id="table"></div>
+        <button id="slett">slett alle kunder</button>
+    </section>
 </body>
+<script>
+    /**
+     * $.get(url, data，回调函数function (data){})
+     * 发送get请求，url是请求地址，data为请求列表的数据，请求成功后的回调函数，参数为服务器返回的数据
+     * 如果有任何改动，要点小绿锤子重新编译
+     */
+    $("#ut").click(function (){
+        const url = "/?navn=" + $("#navn1").val();
+        $.get(url, function (data){
+            $("#vis").html(data);
+        })
+    })
+
+    function formatert(kunder){
+        let ut = "<table><tr><th>Navn</th><th>Adresse</th></tr>";
+        for(let kunde of kunder){
+            ut += "<tr><td>" + kunde.navn +
+                "</td><td>" + kunde.adresse +
+                "</td></tr>";
+        }
+        ut += "</table>";
+        $("#table").html(ut);
+    }
+    //2. 设置这个函数，通过GET方法取得用post存储kunde数据的List
+    function henteKunder(){
+        const url = "/henteAlleKunder";
+        $.get(url, function (kunder){
+            formatert(kunder);
+        })
+    }
+    //一切从按到按钮开始。。。
+    $("#registre").click(function (){
+        const kunde = {
+            navn: $("#navn").val(),
+            adresse:$("#adresse").val()
+        }
+        const url = "/lagrekunde";
+        //1.首先用POST方法，发送一个object，然后返回ingenting，因为server那边的函数是void。
+        $.post(url, kunde, function (){  //所以function里面没有参数，即没有返回值
+            henteKunder();  //之后运行这个函数
+        })
+        $("#navn").val("");
+        $("#adresse").val("");
+    })
+
+    //4. 删除， 可以也返回ingenting，然后再启动henteKunder()方法，跟POST方法同，这样比较简易，不返回任何data！！！
+    $("#slett").click(function (){
+        const url = "/slettKunder";
+        $.get(url, function (){
+            henteKunder();
+        })
+    })
+</script>
 </html>
